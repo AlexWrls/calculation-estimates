@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="parts/_head :: head(${title})"/></head>
+<body>
+<div th:replace="parts/_nav-bar :: nav-bar(${title})"></div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+               <h5>Профиль</h5>
+            </div>
+            <div  style="font-size: large;" class="card-body" th:id="'account-'+${account.id}">
+                <span >Название компании: </span><span id="company" class="text-info" th:text="${account.company}"></span><br>
+                <span>Название отдела/подразделения: </span><span id="department" class="text-info" th:text="${account.department}"></span><br>
+                <span>Адрес: </span><span id="address" class="text-info" th:text="${account.address}"></span><br>
+                <span>Сайт: </span><span id="site" class="text-info" th:text="${account.site}"></span><br>
+                <span>Тел.: </span><span id="phone"  class="text-info"th:text="${account.phone}"></span><br>
+                <span>Должность: </span><span id="position" class="text-info" th:text="${account.position}"></span><br>
+                <span>И.О.Фамилия: </span><span id="name" class="text-info" th:text="${account.name}"></span><br>
+                <span>Логотип: </span><img th:if="${account.image}!=null" th:src="@{${'/img/display/'+ account.id}}" style="max-width:200px" alt=""/><br>
+                <form action="/add-logo" enctype="multipart/form-data" method="post" class="was-validated col-5">
+                    <div class="mb-2">
+                        <input id="poster" type="file" required name="file" class="form-control form-control-sm">
+                        <input type="submit" value="Загрузить логотип" style="padding: 1px 1px 1px 1px" class="btn-sm btn-primary mt-2">
+                        <span th:if="${mess}!=null" class="text-danger small" th:text="${mess}"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditAccount" th:data-account-id="${account.id}">Редактировать</button>
+
+            </div>
+
+        </div>
+        <div class="card">
+            <div class="card-header">
+            <h5>График смет</h5>
+                <label for="begin">с</label>
+                <input type="date" class="form-control-sm" th:value="${begin}" id="begin">
+                <label for="ending">по</label>
+                <input type="date" class="form-control-sm" th:value="${ending}" id="ending">
+                <a id="search-graph" onclick="searchGraph()" class="btn-sm btn-primary text-decoration-none" href="/account" >Показать</a>
+            </div>
+            <div class="card-body">
+                <div id="chart_div" ></div>
+            </div>
+            <div class="card-footer">
+                <p th:if="${max}!=null" class="text-info" th:text="'Максимум: '+${max}+' руб.'"></p>
+                <p th:if="${min}!=null" class="text-info" th:text="'Минимум: '+${min}+' руб.'"></p>
+                <p th:if="${sum}!=null" class="text-info" th:text="'Итого: '+${sum}+' руб.'"></p>
+            </div>
+        </div>
+    </div>
+<!--modal windows-->
+<div th:replace="parts/_modal-edit-account :: modal-edit(${accountDAO})"></div>
+
+<script>
+    function searchGraph() {
+        var begin = document.getElementById('begin');
+        var ending = document.getElementById('ending');
+        var bun = document.getElementById('search-graph');
+        bun.setAttribute('href','/account/?begin='+begin.value+'&ending='+ending.value);
+    }
+</script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script xmlns:th="http://www.w3.org/1999/xhtml" th:inline="javascript" >
+    google.charts.load('current', {packages: ['corechart', 'line']});
+    google.charts.setOnLoadCallback(drawBasic);
+    var graph = [[${graph}]];
+
+    function drawBasic() {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'X');
+        data.addColumn('number', 'Сделка');
+
+        var arr = [
+            [0, 0]
+        ];
+
+        for (let i = 0;i<graph.length;i++){
+                   arr[i] = [i+1];
+                   arr[i][1] = graph[i];
+        }
+
+        data.addRows(arr);
+        console.log(data);
+
+        var options = {
+            hAxis: {
+                title: 'Время'
+            },
+            vAxis: {
+                title: 'Цена'
+            }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+    }
+</script>
+</body>
+</html>

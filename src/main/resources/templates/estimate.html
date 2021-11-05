@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="parts/_head :: head(${title})"/></head>
+<body>
+
+<div th:replace="parts/_nav-bar :: nav-bar(${title})"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header">
+                    <button style="float: right;" type="button" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalAdd">Создать</button>
+                    <h5 style="float: left;">Сметы</h5>
+                </div>
+                <div class="card-body">
+                    <!--paginator-->
+                    <div th:include="parts/_pagination :: pagination(${numbers},${page},${url},${size},${sort})"/>
+                    <table class="table table-bordered table-sm">
+                        <thead class="thead-light m-0">
+                        <tr>
+                            <th>Id</th>
+                            <th>№ Дог.</th>
+                            <th>Объект/Заказчик</th>
+                            <th>Дата</th>
+                            <th>Сумма, руб</th>
+                            <th>Скидка, %</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+
+                        </tr>
+                        </thead>
+                        <hr style="margin-bottom: 0px; width: 0">
+                        <tbody >
+                        <tr th:each="est : ${page}" th:id="'estimated-'+${est.id}">
+                            <td th:text="*{est.id}"></td>
+                            <td th:text="*{est.contract}"></td>
+                            <td th:text="*{est.building}"></td>
+                            <td th:text="*{est.date}"></td>
+                            <td th:text="*{est.customer}" class="d-none"></td>
+                            <td th:text="*{est.position}" class="d-none"></td>
+                            <td th:text="*{est.estimatePrice}"></td>
+                            <td th:text="*{est.discount}"></td>
+
+                            <td><a type="button" th:href="@{/calculation/{estId}(estId=*{est.id})}" class="btn-sm btn-primary text-decoration-none">Детали</a></td>
+                            <td><button type="button" class="btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalDel" th:data-estimated-id="*{est.id}">Удалить</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">
+                    <form th:action="@{/estimate}" method="get" >
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Поиск</h5>
+                            </div>
+                            <div class="card-body" style="text-align: center">
+                                <input type="search" placeholder="Название" class="form-control-sm" id="search" name="search" th:value="${search}">
+                            </div>
+                        </div>
+                        <input type="submit" class="btn-sm btn-secondary mb-2" value="Найти">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!--modal windows-->
+<div th:replace="parts/_modal-del-estimate :: modal-del()"></div>
+<div th:replace="parts/_modal-add-estimate :: modal-add(${estimated})"></div>
+<div th:replace="parts/_modal-edit-estimate :: modal-edit(${estimated})"></div>
+
+</body>
+</html>

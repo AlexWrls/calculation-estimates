@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="parts/_head :: head(${title})"/></head>
+<body>
+<div th:replace="parts/_nav-bar :: nav-bar(${title})"></div>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h5>Товары/услуги/работа</h5>
+            <a type="button" th:href="@{/estimate}" class="btn-sm btn-success text-decoration-none">Назад</a>
+        </div>
+        <div class="card-body">
+            <button type="button" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddProduct">Добавить работу</button>
+            <table class="table table-bordered table-sm">
+                <thead>
+                <tr>
+                    <th class="text-center">№</th>
+                    <th class="text-center">Сокращенное название</th>
+                    <th class="text-center">Полное название</th>
+                    <th class="text-center">Единица измерения</th>
+                    <th class="text-center">Стоимость</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${products}" th:id="'products-'+*{p.id}" >
+                    <td class="text-center" th:text="*{p.id}" ></td>
+                    <td class="text-center" th:text="*{p.shortName}" ></td>
+                    <td class="text-center" th:text="*{p.fullName}" ></td>
+                    <td class="text-center" th:text="*{p.measurement}" ></td>
+                    <td class="text-center" th:text="*{p.price}" ></td>
+                    <td><button type="button" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditProduct" th:data-products-id="*{p.id}">Редактировать</button></td>
+                    <td><button type="button" class="btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelProduct" th:data-products-id="*{p.id}">Удалить</button></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--modal windows-->
+<div th:replace="parts/_modal-add-products :: modal-add(${product})"></div>
+<div th:replace="parts/_modal-edit-products :: modal-edit(${product})"></div>
+<div th:replace="parts/_modal-del-products :: modal-del()"></div>
+</body>
+</html>

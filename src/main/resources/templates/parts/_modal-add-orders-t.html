@@ -1,0 +1,70 @@
+<div id="modalAddOrders" class="modal fade" role="dialog" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="modal-add (orders)">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Добавить проверку</h4>
+                <button type="button" class="btn btn-secondly close" data-bs-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal"  th:object="${orders}" th:method="post" action="/add-orders">
+
+                    <div class="form-group">
+                        <label class="col control-label" for="calculationId">Caculation id</label>
+                        <div class="col">
+                            <input type="text" class="form-control" readonly id="calculationId" name="calculationId"/>
+                        </div>
+                    </div>
+
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label class="col control-label" for="productId">Наименование работы:</label><br>
+                        <div class="col">
+                            <select id="productId"  name="productId" required class="form-control">
+                                <option value=""> -- </option>
+                                <option th:each="p : ${products}"
+                                        th:value="${p.id}"
+                                        th:utext="${p.shortName}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-3">
+                        <label class="col control-label" for="count">Количество:</label>
+                        <div class="col">
+                            <input type="number" class="form-control" required id="count" name="count" />
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-10">
+                            <button type="submit" class="btn btn-primary mt-2">Добавить</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#modalAddOrders").on('show.bs.modal', function (e) {
+            var calculationId = $(e.relatedTarget).data('orders-id');
+            var cols = $('#calculation-' + calculationId + ' td');
+
+            var id = $(cols[0]).text();
+            $('#calculationId').val(id);
+
+        });
+
+        $("#modalAddOrders").on('hidden.bs.modal', function() {
+            var form = $(this).find('form');
+            form[0].reset();
+        });
+
+    </script>
+</div>

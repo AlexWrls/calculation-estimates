@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="parts/_head :: head(${title})"/></head>
+<body>
+<div th:replace="parts/_nav-bar :: nav-bar(${title})"></div>
+<div class="container">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-header">
+                        <button style="float: right;" type="button" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddBuilding">Создать</button>
+                        <h5 style="float: left;">Проект</h5>
+                    </div>
+                    <div class="card-body">
+                        <div th:include="parts/_pagination :: pagination(${numbers},${page},${url},${size},${sort})"/>
+                        <table class="table table-bordered table-sm">
+                            <thead class="thead-light m-0">
+                            <tr>
+
+                                <th>Здание</th>
+                                <th>Дата</th>
+                                <th></th>
+                                <th></th>
+
+                            </tr>
+                            </thead>
+                            <hr style="margin-bottom: 0px; width: 0">
+                            <tbody >
+                            <tr th:each="b : ${page}" th:id="'building-'+${b.id}">
+                                <td class="d-none" th:text="*{b.id}"></td>
+                                <td th:text="*{b.name}"></td>
+                                <td th:text="*{b.date}"></td>
+                                <td><a type="button" th:href="@{/shields/{buildingId}(buildingId=*{b.id})}" class="btn-sm btn-primary text-decoration-none">Детали</a></td>
+                                <td><button type="button" class="btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelBuilding" th:data-building-id="*{b.id}">Удалить</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        <form th:action="@{/building}" method="get" >
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Поиск</h5>
+                                </div>
+                                <div class="card-body" style="text-align: center">
+                                    <input type="search" placeholder="Название" class="form-control-sm" id="search" name="search" th:value="${search}">
+                                </div>
+                            </div>
+                            <input type="submit" class="btn-sm btn-secondary mb-2" value="Найти">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modal windows-->
+<div th:replace="shield/_modal-add-building :: modal-add(${building})"></div>
+<div th:replace="shield/_modal-del-building :: modal-del()"></div>
+</body>
+</html>

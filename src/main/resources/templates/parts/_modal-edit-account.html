@@ -1,0 +1,134 @@
+<div id="modalEditAccount" class="modal fade" role="dialog" xmlns:th="http://www.w3.org/1999/xhtml"
+     th:fragment="modal-edit (accountDAO)">
+    <div class="modal-dialog" style="max-width: 800px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Редактировать аккаунт</h4>
+                <button type="button" class="btn btn-secondly close" data-bs-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" th:object="${accountDAO}" th:method="post" action="/edit-account">
+
+                    <div class="form-group">
+                        <label class="control-label" for="companyE">Название компании:</label>
+                        <div class="col">
+                            <input type="text" class="form-control"  id="companyE" name="company"/>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label" for="departmentE">Название отдела/подразделения:</label>
+                                <div class="col">
+                                    <input type="text"  class="form-control" id="departmentE" name="department"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" control-label" for="addressE">Адресс:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" id="addressE" name="address"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" control-label" for="siteE">Сайт:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control"  id="siteE" name="site"/>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label" for="positionE">Должность:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control"  id="positionE" name="position"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="nameE">И.О.Фамилия:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" id="nameE" name="name"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" control-label" for="phoneE">Телефон:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control phone" id="phoneE" name="phone" placeholder="+7 (___) ___-__-__"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-10">
+                            <button type="submit" class="btn btn-primary mt-2">Сохранить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $("#modalEditAccount").on('show.bs.modal', function (e) {
+            var accountId = $(e.relatedTarget).data('account-id');
+            var cols = $('#account-' + accountId + ' span');
+
+            var company = $(cols[1]).text();
+            var department = $(cols[3]).text();
+            var address = $(cols[5]).text();
+            var site = $(cols[7]).text();
+            var phone = $(cols[9]).text();
+            var position = $(cols[11]).text();
+            var name = $(cols[13]).text();
+
+
+            $('#companyE').val(company);
+            $('#departmentE').val(department);
+            $('#addressE').val(address);
+            $('#siteE').val(site);
+            $('#phoneE').val(phone);
+            $('#positionE').val(position);
+            $('#nameE').val(name);
+
+        });
+
+        $("#modalEditAccount").on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            form[0].reset();
+        });
+
+    </script>
+    <script>
+        // ***********************************
+        // Mask for phone number
+        // ***********************************
+        (function( $ ){
+            var $body;
+            $(document).ready(function(){
+                $body = $('body');
+                $body
+                    .find('.phone').each(function(){
+                    $(this).mask("+7 (999) 999-99-99",{autoclear: false});
+                });
+                $body.on('keyup','.phone',function(){
+                    var phone = $(this),
+                        phoneVal = phone.val(),
+                        form = $(this).parents('form');
+                    if ( (phoneVal.indexOf("_") != -1) || phoneVal == '' ) {
+                        form.find('.btn_submit').attr('disabled',true);
+                    } else {
+                        form.find('.btn_submit').removeAttr('disabled');
+                    }
+                });
+            });
+        })( jQuery );
+    </script>
+
+</div>

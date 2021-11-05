@@ -1,0 +1,123 @@
+<div id="modalEdit" class="modal fade" role="dialog" xmlns:th="http://www.w3.org/1999/xhtml"
+     th:fragment="modal-edit (estimated)">
+    <div class="modal-dialog" style="max-width: 800px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Редактировать смету</h4>
+                <button type="button" class="btn btn-secondly close" data-bs-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" th:object="${estimated}" th:method="post" action="/add-estimated">
+                    <div class="form-group">
+                        <label class="control-label" for="buildingE">Наименовение объекта/стройки:</label>
+                        <div class="col">
+                            <input type="text" class="form-control" required id="buildingE" name="building"/>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label" for="idE">№</label>
+                                <div class="col">
+                                    <input type="text" readonly class="form-control" id="idE" name="id"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" control-label" for="estimatePriceE">Сумма сметы:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" readonly id="estimatePriceE" name="estimatePrice"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" control-label" for="discountE">Скидка:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" onclick="document.getElementById('discountE').value=''" id="discountE" name="discount"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" control-label" for="priceE">ИТОГО:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" id="priceE" name="price"/>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="control-label" for="contractE">№ Договора:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" required id="contractE" name="contract"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="dateE">Дата:</label>
+                                <div class="col">
+                                    <input type="date" class="form-control" id="dateE" name="date"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" control-label" for="customerE">Имя заказчика:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" id="customerE" name="customer"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="positionE">Должность:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" id="positionE" name="position"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-10">
+                            <button type="submit" class="btn btn-primary mt-2">Сохранить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $("#modalEdit").on('show.bs.modal', function (e) {
+            var estimateId = $(e.relatedTarget).data('estimated-id');
+            var cols = $('#estimated-' + estimateId + ' td');
+
+            var id = $(cols[0]).text();
+            var contract = $(cols[1]).text();
+            var building = $(cols[2]).text();
+            var date = $(cols[3]).text();
+            var customer = $(cols[4]).text();
+            var position = $(cols[5]).text();
+            var estimatePrice = $(cols[6]).text();
+            var discount = $(cols[7]).text();
+            var price = $(cols[8]).text();
+
+            $('#idE').val(id);
+            $('#contractE').val(contract);
+            $('#buildingE').val(building);
+            $('#dateE').val(date);
+            $('#customerE').val(customer);
+            $('#positionE').val(position);
+            $('#estimatePriceE').val(estimatePrice);
+            $('#discountE').val(discount);
+            $('#priceE').val(price);
+
+        });
+
+        $("#modalEdit").on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            form[0].reset();
+        });
+
+    </script>
+</div>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="parts/_head :: head(${title})"/></head>
+<body>
+<div th:replace="parts/_nav-bar :: nav-bar(${title})"></div>
+<div class="container">
+            <div class="card" >
+                <div class="card-header">
+                    <h5> Сметный расчет</h5>
+                    <a type="button" th:href="@{/estimate}" class="btn-sm btn-success text-decoration-none">Назад</a>
+                    <td><a type="button" th:href="@{/print/{estId}(estId=${estimated.id})}" class="btn-sm btn-primary text-decoration-none">Печать</a></td>
+                </div>
+                <table class="table table-bordered table-sm">
+                    <thead>
+                    <tr>
+                        <th class="text-center">№ Сметы</th>
+                        <th class="text-center">№ Дог.</th>
+                        <th class="text-center">Название объекта</th>
+                        <th class="text-center">Дата</th>
+                        <th class="text-center">Заказчик</th>
+                        <th class="text-center">Должность</th>
+                        <th class="text-center">Суммы итого, руб.</th>
+                        <th class="text-center">Скидка, %</th>
+                        <th class="text-center">ИТОГО, руб.</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="est : ${estimated}" th:id="'estimated-'+${est.id}" >
+                        <td class="text-center" th:text="*{est.id}" ></td>
+                        <td class="text-center" th:text="*{est.contract}"></td>
+                        <td class="mx-2" th:text="*{est.building}"></td>
+                        <td class="text-center" th:text="*{est.date}"></td>
+                        <td class="text-center" th:text="*{est.customer}"></td>
+                        <td class="text-center" th:text="*{est.position}"></td>
+                        <td class="text-center" th:text="*{est.estimatePrice}"></td>
+                        <td class="text-center" th:text="*{est.discount}"></td>
+                        <td class="text-center" th:text="*{est.price}"></td>
+                         <button type="button" class="btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#modalEdit" th:data-estimated-id="*{est.id}">Редактировать смету</button>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                   <h5> Разделы </h5>
+                    <button type="button" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddCalculation" th:data-estimated-id="${estimated.id}">Создать раздел</button>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                        <tr>
+                            <th class="text-center">№ п/п</th>
+                            <th class="text-center">Наименовение работ и затрат</th>
+                            <th class="text-center">Ед. изм.</th>
+                            <th class="text-center">Кол-во</th>
+                            <th class="text-center"><span>Цена за ед.,</span><br>руб.</th>
+                            <th class="text-center"><span>Стоимость</span><br> всего, руб.</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody th:each="c,i : ${calculations}" th:id="'calculation-'+*{c.id}">
+                        <tr>
+                            <td th:text="*{c.id}" class="d-none"></td>
+                            <td><button type="button" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddOrders" th:data-orders-id="*{c.id}">Добавить работу</button></td>
+                            <td colspan="5" class="fw-bolder fst-italic" th:text="'Раздел № '+*{i.count}+': '+*{c.address}"></td>
+                            <td><button type="button" class="btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelCalculation" th:data-calculation-id="*{c.id}">Удалить раздел</button></td>
+                        </tr>
+                        <tr th:each="o,iter : *{c.getOrders()}" th:id="'orders-'+*{o.id}" >
+                            <td th:text="*{o.id}" class="d-none"></td>
+                            <td class="text-center" th:text="*{i.count}+'.'+*{iter.count}"></td>
+                            <td class="mx-2" th:text="*{o.shortName}"></td>
+                            <td class="text-center" th:text="*{o.measurement}"></td>
+                            <td class="text-center" th:text="*{o.count}"></td>
+                            <td class="text-center" th:text="*{o.price}"></td>
+                            <td class="text-center" th:text="*{o.summary}"></td>
+                            <td><button type="button" class="btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelOrders" th:data-orders-id="*{o.id}">Удалить</button></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="4" class="fw-bolder fst-italic" th:text="'Итого по разделу №'+*{i.count}+':'"></td>
+                            <td class="fw-bolder fst-italic text-center" th:text="*{c.calculationPrice}"></td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+</div>
+
+<!--modal windows-->
+<div th:replace="parts/_modal-del-calculation :: modal-del()"></div>
+<div th:replace="parts/_modal-add-calculation :: modal-add(${calculation})"></div>
+<div th:replace="parts/_modal-add-orders :: modal-add(${products})"></div>
+<div th:replace="parts/_modal-del-orders :: modal-del()"></div>
+<div th:replace="parts/_modal-edit-estimate :: modal-edit(${estimated})"></div>
+</body>
+</html>

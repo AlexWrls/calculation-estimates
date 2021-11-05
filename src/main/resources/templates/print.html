@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="parts/_head :: head(${title})"/></head>
+<body>
+<div class="container" style="font-size: 80%">
+    <div class="row">
+        <div class="col-6" style="font-size: medium;">
+            <img th:if="${account.image}!=null" th:src="@{${'/img/display/'+ account.id}}" style="max-width:250px; max-height: 50px;" alt="logo"/>
+            <p class="mb-0" th:text="${account.phone}"></p>
+            <a class="mb-0 " id="siteVisit" th:text="${account.site}" href="#"></a>
+            <p class="mb-0 " th:text="${account.address}" ></p>
+        </div>
+        <div class="col-2">
+
+        </div>
+        <div class="col-4" style="text-align: right; font-size: medium">
+           <p class="fw-bolder mb-0" >СОГЛАСОВАНО:</p>
+           <p class="mb-0" th:text="${account.position}"></p>
+           <p class="text-decoration-underline mb-0" th:text="${account.name}"></p>
+            <p class="text-decoration-underline mb-0 "
+               th:text="'« '+${#temporals.day(estimated.date)}+' » '+ ${#temporals.monthName(estimated.date)} +' '+${#temporals.year(estimated.date)}+'г.'">
+            </p>
+
+        </div>
+    </div>
+    <div style="text-align: center;margin: auto;max-width: 500px;" class="text-center mt-2">
+        <h6 th:text="${account.company}"></h6>
+        <h6 th:text="${account.department}">Электротехническая лаборатория</h6>
+        <h6 th:text="'ЛОКАЛЬНЫЙ СМЕТНЫЙ РАСЧЕТ №'+${estimated.id}"></h6>
+        <p class="text-decoration-underline fw-bolder mb-0" th:text="${estimated.building}"></p>
+        <p class="fst-italic mt-0" style="font-size: x-small">(наименование объекта)</p>
+    </div>
+    <table class="table table-bordered border-dark table-sm">
+        <thead>
+        <tr>
+            <th class="text-center">№ п/п</th>
+            <th class="text-center">Наименовение работ и затрат</th>
+            <th class="text-center">Ед. изм.</th>
+            <th class="text-center">Кол-во</th>
+            <th class="text-center"><span>Цена за ед.,</span><br>руб.</th>
+            <th class="text-center"><span>Стоимость</span><br> всего, руб.</th>
+        </tr>
+        </thead>
+        <tbody th:each="c,i : ${estimated.getCalculations()}">
+        <tr>
+            <td></td>
+            <td colspan="5" style="padding-left: 5px;" class="fw-bolder fst-italic" th:text="'Раздел № '+*{i.count}+': '+*{c.address}"></td>
+        </tr>
+            <tr th:each="o,iter : *{c.getOrders()}" >
+                <td class="text-center" th:text="*{i.count}+'.'+*{iter.count}"></td>
+                <td style="padding-left: 5px;" th:text="*{o.fullName}"></td>
+                <td class="text-center" th:text="*{o.measurement}"></td>
+                <td class="text-center" th:text="*{o.count}"></td>
+                <td class="text-center" th:text="*{o.price}"></td>
+                <td class="text-center" th:text="*{o.summary}"></td>
+            </tr>
+        <tr>
+            <td></td>
+            <td colspan="4" style="padding-left: 5px;" class="fw-bolder fst-italic" th:text="'Итого по разделу №'+*{i.count}+':'"></td>
+            <td class="fw-bolder fst-italic text-center" th:text="*{c.calculationPrice}"></td>
+        </tr>
+
+        </tbody>
+        <tbody>
+        <tr>
+            <td></td>
+            <td style="padding-left: 5px;" class="fw-bolder" colspan="4" >Итого работ и затрат:</td>
+            <td class="fw-bolder text-center" id="estPrice" th:text="${estimated.estimatePrice}"></td>
+        </tr>
+        <tr th:if="${estimated.discount}">
+            <td></td>
+            <td style="padding-left: 5px;" class="fw-bolder">Скидка:</td>
+            <td class="text-center">%</td>
+            <td class="text-center" colspan="2" id="discount" th:text="${estimated.discount}"></td>
+            <td class="fw-bolder text-center" id="discountSum" ></td>
+        </tr>
+        <tr th:if="${estimated.discount}">
+            <td></td>
+            <td style="padding-left: 5px;" class="fw-bolder" colspan="4" >ИТОГО:</td>
+            <td class="fw-bolder text-center" id="calc" th:text="${estimated.price}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<script>
+    window.onload = function() {
+       window.print();
+       const estPrice = $('#estPrice').text();
+       const  calc = $('#calc').text();
+       var siteVisit = document.getElementById("siteVisit").textContent;
+       document.getElementById("siteVisit").setAttribute('href',siteVisit)
+       document.getElementById("discountSum").innerText = (calc - estPrice).toFixed(1);
+    };
+    window.onclick = function () {
+        window.history.back();
+    };
+</script>
+</body>
+</html>

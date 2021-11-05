@@ -1,0 +1,42 @@
+<div id="modalDelOrders" class="modal fade" role="dialog" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="modal-del()">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Удалить замер</h4>
+                <button type="button" class="btn btn-secondly close" data-bs-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="ordersDelete">Уверены что хотитет удалить</label>
+                    <div class="col">
+                        <input type="text" class="form-control" readonly id="ordersDelete" name="ordersDelete" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a type="button" id="delOrders" href="" class="btn btn-danger">Удалить</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $("#modalDelOrders").on('show.bs.modal', function(e) {
+            var calculationId = $(e.relatedTarget).data('orders-id');
+            var cols = $('#orders-' + calculationId + ' td');
+            var id = $(cols[0]).text();
+            var nameProduct = $(cols[2]).text();
+            var countProduct = $(cols[3]).text();
+            var measureProduct = $(cols[4]).text();
+
+            $('#ordersDelete').val(nameProduct+' '+measureProduct+' '+countProduct);
+            $('#delOrders').attr('href','/delete-orders/'+id);
+        });
+
+        $("#modalDelOrders").on('hidden.bs.modal', function() {
+            $('#del').attr('href','#');
+        });
+
+    </script>
+</div>

@@ -1,0 +1,107 @@
+<div id="modalAddShield" class="modal fade" role="dialog" xmlns:th="http://www.w3.org/1999/xhtml"
+     th:fragment="modal-add (shield)">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Создать схему</h4>
+                <button type="button" class="btn btn-secondly close" data-bs-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" action="/add-shield" th:object="${shield}" th:method="post">
+                   <input type="text" class="form-control d-none" readonly id="buildingId" th:field="${shield.buildingId}" name="buildingId">
+                    <div class="row">
+                        <div class="col-6">
+                        <div class="form-group">
+                            <label class="col control-label" for="nameShield">Наменование щита:</label>
+                            <div class="col">
+                                <input type="text" class="form-control" required id="nameShield"  name="nameShield">
+                            </div>
+                        </div>
+
+                            <div class="form-group">
+                                <label class="col control-label" for="phase">Фаз:</label>
+                                <div class="col">
+                                    <input type="number" class="form-control" required id="phase" name="phase">
+                                </div>
+                            </div>
+
+                        <div class="form-group">
+                            <label class="col control-label" for="nameProtect">Аппарат защиты:</label>
+                            <div class="col">
+                                <input type="text" class="form-control" required id="nameProtect"
+                                       name="nameProtect">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col control-label" for="RCDCurrent">Ток УЗО, mA:</label>
+                            <div class="col">
+                                <input type="number" class="form-control" id="RCDCurrent" name="RCDCurrent">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col control-label" for="descriptionProtect">Характеристика:</label>
+                            <div class="col">
+                                <input type="text" class="form-control" required id="descriptionProtect"
+                                       name="descriptionProtect">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col control-label" for="currentProtect">Ток, А:</label>
+                            <div class="col">
+                                <input type="number" class="form-control" required id="currentProtect"
+                                       name="currentProtect">
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="col-6">
+
+                            <div class="form-group">
+                                <label class="col control-label" for="cableE">Кабель:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" id="cableE" name="cable">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col control-label" for="lengthE">Длина, м:</label>
+                                <div class="col">
+                                    <input type="number" class="form-control" id="lengthE" name="length">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col control-label" for="ratedCurrentE">Расчетный ток, А:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" id="ratedCurrentE" name="ratedCurrent">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col control-label" for="ratedPowerE">Расчетная мощность, кВт:</label>
+                                <div class="col">
+                                    <input type="text" class="form-control" id="ratedPowerE" name="ratedPower">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-10">
+                            <button type="submit" class="btn btn-primary mt-2">Сохранить</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $("#modalAddShield").on('hidden.bs.modal', function () {
+            var form = $(this).find('form');
+            form[0].reset();
+        });
+
+    </script>
+</div>

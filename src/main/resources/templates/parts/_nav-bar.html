@@ -1,0 +1,13 @@
+<div class="container" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="nav-bar(title)">
+    <div class="topnav">
+        <a th:class="*{title}=='Estimate'?'active':''" th:href="@{/estimate}">Сметы</a>
+        <a th:class="*{title}=='Account'?'active':''" th:href="@{/account}">Профиль</a>
+        <a th:class="*{title}=='Products'?'active':''" th:href="@{/products}">Виды рбот</a>
+        <a th:class="*{title}=='Shield'?'active':''" th:href="@{/building}">Cхемы</a>
+        <a th:class="*{title}=='About'?'active':''" href="#">About</a>
+        <form th:action="@{/logout}" class="form-inline" method="post">
+            <input type="submit" class="btn-sm btn-secondary mb-0 mt-0" value="Выйти"/>
+        </form>
+    </div>
+
+</div>

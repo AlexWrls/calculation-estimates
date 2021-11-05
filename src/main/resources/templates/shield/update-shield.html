@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="parts/_head :: head(${title})"/></head>
+<body>
+<div th:replace="parts/_nav-bar :: nav-bar(${title})"></div>
+<div class="container">
+    <a type="button" th:href="'/shields/'+${shield.buildingId}" class="btn-sm btn-success text-decoration-none">Назад</a>
+    <table class="table table-bordered border-dark table-sm">
+        <thead class="thead-light m-0">
+        <tr>
+            <th class="text-center" style="width: 2%">№</th>
+            <th class="text-center" style="width: 5%">Фаз</th>
+            <th class="text-center">Аппарат защиты</th>
+            <th class="text-center">Ток УЗО</th>
+            <th class="text-center">Хар-ка</th>
+            <th class="text-center" >Ток защиты</th>
+            <th class="text-center">Потребитель</th>
+            <th class="text-center">Кабель</th>
+            <th class="text-center">Длина</th>
+            <th class="text-center">Расч. ток</th>
+            <th class="text-center">К использования</th>
+            <th></th>
+        </tr>
+        </thead>
+        <hr style="margin-bottom: 0px; width: 0">
+        <tbody >
+        <tr>
+            <td colspan="12" class="text-center" th:text="${shield.nameShield}"></td>
+        </tr>
+        <tr>
+            <td class="d-none" id="sId" th:text="${shield.id}"></td>
+            <td class="text-center">Ввод</td>
+            <td class="text-center" th:text="${shield.phase}"></td>
+            <td class="text-center" th:text="${shield.nameProtect}"></td>
+            <td class="text-center" th:text="${shield.RCDCurrent}"></td>
+            <td class="text-center" th:text="${shield.descriptionProtect}"></td>
+            <td class="text-center" th:text="${shield.currentProtect}"></td>
+            <td class="text-center">Ввод</td>
+            <td class="text-center" th:text="${shield.cable}"></td>
+            <td class="text-center" th:text="${shield.length}"></td>
+            <td class="text-center" th:text="${shield.ratedCurrent}"></td>
+            <td class="text-center" th:text="${shield.ratedPower}"></td>
+        </tr>
+        <tr th:each="g,iter : ${groups}" th:id="'group-'+*{g.id}">
+            <td class="d-none"  th:text="*{g.id}"></td>
+            <td class="text-center" th:text="*{iter.count}"></td>
+            <td class="text-center" th:text="*{g.phase}"></td>
+            <td class="text-center" th:text="*{g.nameProtect}"></td>
+            <td class="text-center" th:text="*{g.RCDCurrent}"></td>
+            <td class="text-center" th:text="*{g.descriptionProtect}"></td>
+            <td class="text-center" th:text="*{g.currentProtect}" ></td>
+            <td class="text-center" th:text="*{g.name}"></td>
+            <td class="text-center" th:text="*{g.cable}"></td>
+            <td class="text-center" th:text="*{g.length}"></td>
+            <td class="text-center" th:text="*{g.ratedCurrent}"></td>
+            <td class="text-center" th:text="*{g.usageRate}"></td>
+            <td style="width: 10%"><button id="copy" th:onclick="'copy('+*{g.id}+')'" class="btn-sm btn-success">+</button>
+                <button type="button" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditGroup" th:data-group-id="*{g.id}">E</button>
+                <button type="button" class="btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelGroup" th:data-group-id="*{g.id}">Х</button>
+            </td>
+        </tr>
+        <form action="/add-group" th:object="${group}" th:method="post">
+
+        <tr class="border-info">
+           <input class="d-none" type="text" style="width: 80%" id="shieldID" name="shieldID">
+            <td class="text-center border-info" ></td>
+            <td class="text-center border-info" ><input type="number" class="form-control" required  id="phase" name="phase"></td>
+            <td class="text-center" ><input type="text" class="form-control" required  id="nameProtect" name="nameProtect"></td>
+            <td class="text-center" ><input type="number"  class="form-control" id="RCDCurrent" name="RCDCurrent"></td>
+            <td class="text-center" ><input type="text" class="form-control" required  id="descriptionProtect" name="descriptionProtect"></td>
+            <td class="text-center" ><input type="number" class="form-control" required  id="currentProtect" name="currentProtect"></td>
+            <td class="text-center" ><input type="text" class="form-control" id="name" name="name"></td>
+            <td class="text-center" ><input type="text"  class="form-control"  id="cable" name="cable"></td>
+            <td class="text-center"><input type="number" class="form-control"  id="length" name="length"></td>
+            <td class="text-center" ><input type="text" class="form-control" id="ratedCurrent" name="ratedCurrent"></td>
+            <td class="text-center" ><input type="text" class="form-control" id="usageRate" name="usageRate"></td>
+            <td class="text-center" >
+                <input th:if="${groups.size()<14}" type="submit" class="btn-sm btn-primary" value="Добавить"></td>
+        </tr>
+        </form>
+        </tbody>
+    </table>
+</div>
+<!--modal windows-->
+<div th:replace="shield/_modal-del-group :: modal-del()"></div>
+<div th:replace="shield/_modal-edit-group :: modal-edit(${group})"></div>
+<script>
+    document.getElementById('shieldID').value=document.getElementById('sId').textContent;
+    function copy(id) {
+        var group = document.getElementById('group-'+id).getElementsByTagName('td');
+        document.getElementById('phase').value='';
+        document.getElementById('nameProtect').value='';
+        document.getElementById('RCDCurrent').value='';
+        document.getElementById('descriptionProtect').value='';
+        document.getElementById('currentProtect').value='';
+        document.getElementById('name').value='';
+        document.getElementById('cable').value='';
+        document.getElementById('length').value='';
+        document.getElementById('ratedCurrent').value='';
+        document.getElementById('usageRate').value='';
+
+        document.getElementById('phase').value=group[2].textContent;
+        document.getElementById('nameProtect').value=group[3].textContent;
+        document.getElementById('RCDCurrent').value=group[4].textContent;
+        document.getElementById('descriptionProtect').value=group[5].textContent;
+        document.getElementById('currentProtect').value=group[6].textContent;
+        document.getElementById('name').value=group[7].textContent;
+        document.getElementById('cable').value=group[8].textContent;
+        document.getElementById('length').value=group[9].textContent;
+        document.getElementById('ratedCurrent').value=group[10].textContent;
+        document.getElementById('usageRate').value=group[11].textContent;
+    }
+</script>
+</body>
+</html>

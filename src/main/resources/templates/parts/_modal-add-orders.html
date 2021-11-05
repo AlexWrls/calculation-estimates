@@ -1,0 +1,96 @@
+<div id="modalAddOrders" class="modal fade" role="dialog" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="modal-add (products)">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Добавить проверку</h4>
+                <button type="button" class="btn btn-secondly close" data-bs-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+
+                <div class="d-none" th:each="p : ${products}">
+                    <p class="prod" th:text="*{p.id}" /></p>
+                    <p class="prodName" th:text="*{p.shortName}" /></p>
+                </div>
+                <div  class="form-group d-none">
+                    <label class="col control-label" for="calculationId">Caculation id</label>
+                    <div class="col">
+                        <input type="text" class="form-control" readonly id="calculationId" name="calculationId"/>
+                    </div>
+                </div>
+                <label class="col-6" for="inputProductName">Наименование</label>
+                <label class="col-3" style="margin-left: 30px;" for="inputProduct">Кол-во</label>
+                <div class="row" >
+
+                    <div class="form-group col-6" id="inputProductName">
+
+                    </div>
+
+                    <div class="form-group col-3" id="inputProduct">
+
+                    </div>
+                </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-10">
+                            <a href="#" type="submit" id="addOrders" onclick="addOrders()" class="btn btn-primary mt-2">Добавить</a>
+                        </div>
+                    </div>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $("#modalAddOrders").on('show.bs.modal', function (e) {
+            var calculationId = $(e.relatedTarget).data('orders-id');
+            var cols = $('#calculation-' + calculationId + ' td');
+
+            var id = $(cols[0]).text();
+            $('#calculationId').val(id);
+        });
+
+        var productId = document.getElementsByClassName("prod");
+        var productName = document.getElementsByClassName("prodName");
+
+        for (let i =0; i<productId.length;i++){
+            let input = document.createElement('input');
+            input.className="form-control in";
+            document.getElementById("inputProduct").appendChild(input);
+        }
+
+        for (let i =0; i<productName.length;i++){
+            let p = document.createElement('p');
+            p.className="inName";
+            p.innerText=productName[i].textContent;
+            document.getElementById("inputProductName").appendChild(p);
+        }
+
+
+        var count = "name=";
+        var countProduct = document.getElementsByClassName("form-control in");
+
+        function addOrders() {
+           let calculationId = "&calculationId=" + document.getElementById("calculationId").value;
+            for (var j =0; j<countProduct.length;j++){
+                if (countProduct[j].value !== ""){
+                    count += productId[j].textContent+"-"+countProduct[j].value+"!"
+                }
+            }
+            document.getElementById("addOrders").setAttribute('href',"/add-orders?"+count+calculationId);
+        }
+
+
+
+        $("#modalAddOrders").on('hidden.bs.modal', function() {
+            var form = $(this).find('form');
+            form[0].reset();
+        });
+
+    </script>
+</div>

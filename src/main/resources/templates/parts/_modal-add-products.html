@@ -1,0 +1,59 @@
+<div id="modalAddProduct" class="modal fade" role="dialog" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="modal-add (product)">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Добавить проверку</h4>
+                <button type="button" class="btn btn-secondly close" data-bs-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal"  th:object="${product}" th:method="post" action="/add-product">
+
+                    <div class="form-group">
+                        <label class="col control-label" for="shortName">Short name</label>
+                        <div class="col">
+                            <input type="text" class="form-control" maxlength="25" required id="shortName" name="shortName"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col control-label" for="fullName">Full name</label>
+                        <div class="col">
+                            <textarea name="fullName" id="fullName" required class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col control-label" for="measurement">Measurement</label>
+                        <div class="col">
+                            <input type="text" class="form-control" required id="measurement" name="measurement"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col control-label" for="price">Price</label>
+                        <div class="col">
+                            <input type="number" class="form-control" required id="price" name="price"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-10">
+                            <button type="submit" class="btn btn-primary mt-2">Добавить</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+
+        $("#modalAddProduct").on('hidden.bs.modal', function() {
+            var form = $(this).find('form');
+            form[0].reset();
+        });
+
+    </script>
+</div>

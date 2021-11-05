@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="parts/_head :: head(${title})"/></head>
+<body>
+<div th:replace="parts/_nav-bar :: nav-bar(${title})"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header">
+                    <button style="float: right;" type="button" class="btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddShield">Создать</button>
+                    <h5 style="float: left;">Схемы</h5>
+                    <a type="button" th:href="@{/building}" class="btn-sm btn-success text-decoration-none">Назад</a>
+                </div>
+                <div class="card-body">
+                    <p th:text="${building.name}"></p>
+                    <table class="table table-bordered table-sm">
+                        <thead class="thead-light m-0">
+                        <tr>
+                            <th>Лист</th>
+                            <th>Щит</th>
+                            <th>Ток, A</th>
+                            <th>Мощьность, кВт</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <hr style="margin-bottom: 0px; width: 0">
+                        <tbody >
+                        <tr th:each="s,iter : ${shields}" th:id="'shield-'+${s.id}">
+                            <td class="d-none"  th:text="*{s.id}"></td>
+                            <td  th:text="*{iter.count}"></td>
+                            <td th:text="*{s.nameShield}"></td>
+                            <td th:text="*{s.ratedCurrent}"></td>
+                            <td th:text="*{s.ratedPower}"></td>
+                            <td><a type="button" th:href="@{/shield/{shieldId}(shieldId=*{s.id})}" class="btn-sm btn-primary text-decoration-none">Печать</a></td>
+                            <td><a type="button" th:href="@{/showshield/{shieldId}(shieldId=*{s.id})}" class="btn-sm btn-primary text-decoration-none">Детали</a></td>
+                            <td><button type="button" class="btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelShield" th:data-shield-id="*{s.id}">Удалить</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">
+                    <form th:action="@{/shields}" method="get" >
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Поиск</h5>
+                            </div>
+                            <div class="card-body" style="text-align: center">
+                                <input type="search" placeholder="Название" class="form-control-sm" id="search" name="search" th:value="${search}">
+                            </div>
+                        </div>
+                        <input type="submit" class="btn-sm btn-secondary mb-2" value="Найти">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--modal windows-->
+<div th:replace="shield/_modal-del-shield :: modal-del()"></div>
+<div th:replace="shield/_modal-add-shield :: modal-add(${shield})"></div>
+</body>
+</html>

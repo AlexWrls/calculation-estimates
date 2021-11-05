@@ -1,0 +1,40 @@
+<div id="modalDelCalculation" class="modal fade" role="dialog" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="modal-del()">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Удалить раздел</h4>
+                <button type="button" class="btn btn-secondly close" data-bs-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="calcDell">Уверены что хотитет удалить</label>
+                    <div class="col">
+                        <input type="text" class="form-control" readonly id="calcDell" name="calcDell" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a type="button" id="del" href="" class="btn btn-danger">Удалить</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $("#modalDelCalculation").on('show.bs.modal', function(e) {
+            var calculationId = $(e.relatedTarget).data('calculation-id');
+            var cols = $('#calculation-' + calculationId + ' td');
+            var id = $(cols[0]).text();
+            var calculation = $(cols[2]).text();
+
+            $('#calcDell').val(calculation);
+            $('#del').attr('href','/delete-calculation/'+id);
+        });
+
+        $("#modalDelCalculation").on('hidden.bs.modal', function() {
+            $('#del').attr('href','#');
+        });
+
+    </script>
+</div>

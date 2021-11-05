@@ -1,0 +1,40 @@
+<div id="modalDelProduct" class="modal fade" role="dialog" xmlns:th="http://www.w3.org/1999/xhtml" th:fragment="modal-del()">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Удалить </h4>
+                <button type="button" class="btn btn-secondly close" data-bs-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label" for="productD">Уверены что хотитет удалить</label>
+                    <div class="col">
+                        <input type="text" class="form-control" readonly id="productD" name="productD" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a type="button" id="del" href="" class="btn btn-danger">Удалить</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $("#modalDelProduct").on('show.bs.modal', function(e) {
+            var productId = $(e.relatedTarget).data('products-id');
+            var cols = $('#products-' + productId + ' td');
+            var id = $(cols[0]).text();
+            var product = $(cols[1]).text()+' '+$(cols[4]).text();
+
+            $('#productD').val(product);
+            $('#del').attr('href','/delete-product/'+id);
+        });
+
+        $("#modalDelProduct").on('hidden.bs.modal', function() {
+            $('#del').attr('href','#');
+        });
+
+    </script>
+</div>
